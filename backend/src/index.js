@@ -8,7 +8,7 @@ dotenv.config({
 
 const startServer = async () => {
     try {
-        //console.log("MONGODB_URI:", process.env.MONGODB_URI);
+        console.log("MONGODB_URI:", process.env.MONGODB_URI);
         await connectDB();
 
         app.on("error", (error) => {
