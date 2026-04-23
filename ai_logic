@@ -1,0 +1,123 @@
+import { GoogleGenAI, Type } from "@google/genai";
+
+/**
+ * RECRUITMENT SCREENING ENGINE
+ * Logic:
+ * 1. Scoring: Uses low temperature to ensure consistent, merit-based results.
+ * 2. Comparison: Processes candidates together so the AI can rank them relatively.
+ * 3. Weights: Applies 50% Skills, 30% Experience, and 20% Relevance.
+ * 4. Clarity: Forces the AI to justify every score with strengths and gaps.
+ */
+
+const MODEL_NAME = "gemini-2.5-flash-preview-09-2025";
+
+export interface ScreeningResult {
+  candidateId: string;
+  candidateRank: number;
+  matchScore: number;
+  strengths: string[];
+  gapsRisks: string[];
+  relevanceExplanation: string;
+  finalRecommendation: string;
+}
+
+export class AIScreeningService {
+  private ai: GoogleGenAI;
+
+  constructor(apiKey: string) {
+    this.ai = new GoogleGenAI({ apiKey });
+  }
+
+  /**
+   * Main screening logic. 
+   * It cleans the input data, sends a structured prompt to Gemini, 
+   * and ensures the output is a perfectly ranked JSON array.
+   */
+  async screenCandidates(jobDescription: string, candidatesData: string, shortlistCount: number = 20): Promise<ScreeningResult[]> {
+    const cleanJD = jobDescription.trim();
+    const cleanCandidates = candidatesData.trim();
+
+    const prompt = `
+      ROLE: Senior Technical AI Recruiter
+      OBJECTIVE: Rank candidates objectively based on merit.
+      
+      SCORING WEIGHTS:
+      1. Technical Skills (50%): Match for the specific tech stack.
+      2. Experience (30%): Seniority and years in the field.
+      3. Relevance (20%): Industry background and education.
+
+      CONSTRAINTS:
+      - Neutrality: Ignore name, gender, and age.
+      - Relative Ranking: Compare candidates against each other.
+      - Branding: Recommendations must start with "This candidate is well-versed in...".
+
+      INPUTS:
+      [JOB SPEC] ${cleanJD}
+      [CANDIDATES] ${cleanCandidates}
+
+      OUTPUT: A JSON list ranked by matchScore.
+    `;
+
+    try {
+      const response = await this.ai.models.generateContent({
+        model: MODEL_NAME,
+        contents: [{ role: "user", parts: [{ text: prompt }] }],
+        generationConfig: {
+          temperature: 0.15,
+          responseMimeType: "application/json",
+          responseSchema: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                candidateId: { type: Type.STRING },
+                candidateRank: { type: Type.NUMBER },
+                matchScore: { type: Type.NUMBER },
+                strengths: { 
+                  type: Type.ARRAY, 
+                  items: { type: Type.STRING },
+                  description: "Key technical advantages."
+                },
+                gapsRisks: { 
+                  type: Type.ARRAY, 
+                  items: { type: Type.STRING },
+                  description: "Missing skills or experience gaps."
+                },
+                relevanceExplanation: { 
+                  type: Type.STRING,
+                  description: "Why this profile fits this specific job context."
+                },
+                finalRecommendation: { 
+                  type: Type.STRING,
+                  description: "Verdict starting with 'This candidate is well-versed in...'"
+                }
+              },
+              required: ["candidateId", "candidateRank", "matchScore", "strengths", "gapsRisks", "relevanceExplanation", "finalRecommendation"]
+            }
+          }
+        }
+      });
+
+      const textOutput = response.candidates?.[0]?.content?.parts?.[0]?.text;
+
+      if (!textOutput) {
+        throw new Error("No response from AI engine.");
+      }
+
+      // Parse and manually sort to guarantee the UI always displays the best matches first.
+      const rawResults = JSON.parse(textOutput) as ScreeningResult[];
+      return rawResults.sort((a, b) => b.matchScore - a.matchScore);
+
+    } catch (error: any) {
+      // Log specific failure categories to help with hackathon debugging.
+      if (error.message?.includes('429')) {
+        console.error("Error: Rate limit hit.");
+      } else if (error.message?.toLowerCase().includes('safety')) {
+        console.error("Error: Content blocked by filters.");
+      }
+      
+      console.error("AI Screening Error:", error);
+      throw error;
+    }
+  }
+}
