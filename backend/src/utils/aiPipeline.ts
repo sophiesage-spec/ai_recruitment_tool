@@ -8,13 +8,15 @@ import { MAX_SCREENED_CANDIDATES } from "../config/constants.js";
  * Builds a structured prompt for the Gemini model.
  * The AI receives pure JSON data — no DB access, no side effects.
  *
- * @param jobDescription - The full text description of the job
- * @param applicants     - Array of applicant documents from the database
- * @returns              - A formatted string prompt ready to send to Gemini
+ * @param jobDescription  - The full text description of the job
+ * @param applicants      - Array of applicant documents from the database
+ * @param recruiterPrompt - Optional custom instructions written by the recruiter
+ * @returns               - A formatted string prompt ready to send to Gemini
  */
 export const preparePrompt = (
   jobDescription: string,
-  applicants: IApplicantDocument[]
+  applicants: IApplicantDocument[],
+  recruiterPrompt?: string
 ): string => {
   const applicantPayload = applicants.map((a) => ({
     id: (a._id as { toString(): string }).toString(),
@@ -24,12 +26,17 @@ export const preparePrompt = (
     education: a.education,
   }));
 
+  // Only include the recruiter section if they actually wrote something
+  const recruiterSection = recruiterPrompt?.trim()
+    ? `\n## Recruiter's Custom Instructions\n${recruiterPrompt.trim()}\nApply these instructions in addition to the job description above when scoring candidates.\n`
+    : "";
+
   return `
 You are an expert AI recruitment assistant. Your task is to evaluate and rank job applicants for a specific role.
 
 ## Job Description
 ${jobDescription}
-
+${recruiterSection}
 ## Applicants
 ${JSON.stringify(applicantPayload, null, 2)}
 
