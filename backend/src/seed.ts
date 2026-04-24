@@ -2,7 +2,7 @@
  * Seed Script — AI Talent Screener
  * Run with: npm run seed
  *
- * Inserts 2 sample jobs and 25 sample applicants into MongoDB.
+ * Inserts 10 sample jobs and 50 sample applicants into MongoDB.
  * Safe to run multiple times — clears existing data first.
  */
 
@@ -44,16 +44,104 @@ const seed = async () => {
       field is preferred.`,
       department: "Analytics",
     },
+    {
+      title: "Frontend Developer",
+      description: `We are looking for a Frontend Developer with 3+ years of experience building 
+      modern, responsive web applications. Strong proficiency in React, TypeScript, and CSS frameworks 
+      such as Tailwind CSS or Material UI is required. You should be comfortable working with REST APIs, 
+      state management libraries (Redux or Zustand), and version control with Git. Experience with 
+      Next.js, performance optimization, and accessibility standards is a strong plus. You will work 
+      closely with designers and backend engineers to deliver exceptional user experiences.`,
+      department: "Engineering",
+    },
+    {
+      title: "DevOps Engineer",
+      description: `We are hiring a DevOps Engineer to manage and improve our cloud infrastructure 
+      and deployment pipelines. The ideal candidate has 4+ years of experience with AWS or GCP, 
+      Kubernetes, Docker, and CI/CD tools such as Jenkins, GitHub Actions, or CircleCI. Strong 
+      scripting skills in Bash or Python are required. Experience with infrastructure as code 
+      (Terraform or Pulumi), monitoring tools (Prometheus, Grafana), and security best practices 
+      is highly desirable. You will ensure system reliability, scalability, and uptime.`,
+      department: "Infrastructure",
+    },
+    {
+      title: "Product Manager",
+      description: `We are seeking an experienced Product Manager to drive the vision and roadmap 
+      for our core product. The ideal candidate has 4+ years of product management experience in a 
+      tech company, with a strong ability to gather customer insights, define requirements, and 
+      prioritize features. Experience working with agile/scrum teams, writing clear product specs, 
+      and collaborating with engineering, design, and marketing is essential. Familiarity with 
+      analytics tools (Mixpanel, Amplitude) and A/B testing is a plus. MBA or technical background preferred.`,
+      department: "Product",
+    },
+    {
+      title: "UX/UI Designer",
+      description: `We are looking for a UX/UI Designer with 3+ years of experience designing 
+      intuitive digital products. Proficiency in Figma is required. You should have a strong 
+      portfolio demonstrating user-centered design, wireframing, prototyping, and usability testing. 
+      Experience collaborating with developers to ensure pixel-perfect implementation, conducting 
+      user research, and creating design systems is essential. Knowledge of accessibility standards 
+      (WCAG) and motion design is a plus. You will own the end-to-end design process for key product areas.`,
+      department: "Design",
+    },
+    {
+      title: "Cybersecurity Analyst",
+      description: `We are hiring a Cybersecurity Analyst to protect our systems and data from 
+      threats. The ideal candidate has 3+ years of experience in information security, with hands-on 
+      knowledge of SIEM tools, vulnerability assessment, penetration testing, and incident response. 
+      Familiarity with frameworks such as NIST, ISO 27001, or SOC 2 is required. Experience with 
+      network security, firewall management, and cloud security (AWS or Azure) is highly desirable. 
+      Certifications such as CEH, CISSP, or CompTIA Security+ are a strong advantage.`,
+      department: "Security",
+    },
+    {
+      title: "Machine Learning Engineer",
+      description: `We are seeking a Machine Learning Engineer to build and deploy ML models at scale. 
+      The ideal candidate has 4+ years of experience with Python, TensorFlow or PyTorch, and end-to-end 
+      ML pipelines. Strong understanding of supervised and unsupervised learning, NLP, and model 
+      evaluation is required. Experience with MLOps tools (MLflow, Kubeflow), cloud ML services 
+      (AWS SageMaker, GCP Vertex AI), and data engineering (Spark, Kafka) is a strong plus. 
+      You will collaborate with data scientists and engineers to bring AI solutions into production.`,
+      department: "AI & Data",
+    },
+    {
+      title: "Finance Manager",
+      description: `We are looking for a Finance Manager with 5+ years of experience in financial 
+      planning, analysis, and reporting. The ideal candidate is proficient in financial modelling, 
+      budgeting, forecasting, and preparing management accounts. Strong knowledge of IFRS or GAAP, 
+      ERP systems (SAP or Oracle), and advanced Excel is required. CPA or ACCA qualification is 
+      preferred. Experience in a fast-growing startup or tech company is an advantage. You will 
+      oversee financial operations, manage audits, and provide strategic financial insights to leadership.`,
+      department: "Finance",
+    },
+    {
+      title: "HR Business Partner",
+      description: `We are hiring an HR Business Partner to support our growing teams across the 
+      organization. The ideal candidate has 4+ years of HR experience, with strong expertise in 
+      talent acquisition, performance management, employee relations, and organizational development. 
+      Experience partnering with senior leaders to align HR strategy with business goals is essential. 
+      Familiarity with HRIS systems (BambooHR, Workday), labour law, and DEI initiatives is required. 
+      You will be a trusted advisor to managers and employees, driving a high-performance culture.`,
+      department: "Human Resources",
+    },
   ]);
 
   const engineerJobId = jobs[0]._id;
   const analystJobId = jobs[1]._id;
+  const frontendJobId = jobs[2]._id;
+  const devopsJobId = jobs[3]._id;
+  const productJobId = jobs[4]._id;
+  const designJobId = jobs[5]._id;
+  const securityJobId = jobs[6]._id;
+  const mlJobId = jobs[7]._id;
+  const financeJobId = jobs[8]._id;
+  const hrJobId = jobs[9]._id;
 
   console.log(`✅ Inserted ${jobs.length} jobs.`);
 
   // ── Insert Applicants ─────────────────────────────────────────────────────
   const applicants = await Applicant.insertMany([
-    // Engineer applicants
+    // ── Senior Software Engineer applicants ───────────────────────────────
     {
       jobId: engineerJobId,
       name: "Alice Nakimera",
@@ -146,7 +234,7 @@ const seed = async () => {
       education: "BSc Information Systems, Gulu University",
     },
 
-    // Analyst applicants
+    // ── Data Analyst applicants ───────────────────────────────────────────
     {
       jobId: analystJobId,
       name: "Nathan Byarugaba",
@@ -230,6 +318,190 @@ const seed = async () => {
       skills: ["Python", "pandas", "SQL", "Tableau", "Machine Learning", "NLP"],
       experience: 7,
       education: "MSc Data Science, Strathmore University",
+    },
+
+    // ── Frontend Developer applicants ─────────────────────────────────────
+    {
+      jobId: frontendJobId,
+      name: "Amara Diallo",
+      skills: ["React", "TypeScript", "Tailwind CSS", "Next.js", "Redux", "Git"],
+      experience: 4,
+      education: "BSc Computer Science, University of Dakar",
+    },
+    {
+      jobId: frontendJobId,
+      name: "Ben Mutabazi",
+      skills: ["Vue.js", "JavaScript", "CSS", "HTML", "Bootstrap"],
+      experience: 2,
+      education: "BSc Information Technology, University of Rwanda",
+    },
+    {
+      jobId: frontendJobId,
+      name: "Cynthia Osei",
+      skills: ["React", "Next.js", "TypeScript", "Zustand", "Tailwind CSS", "Figma"],
+      experience: 5,
+      education: "BSc Computer Engineering, KNUST Ghana",
+    },
+
+    // ── DevOps Engineer applicants ────────────────────────────────────────
+    {
+      jobId: devopsJobId,
+      name: "Daniel Nkosi",
+      skills: ["AWS", "Kubernetes", "Docker", "Terraform", "GitHub Actions", "Prometheus"],
+      experience: 6,
+      education: "BSc Computer Science, University of Pretoria",
+    },
+    {
+      jobId: devopsJobId,
+      name: "Esther Wanjiku",
+      skills: ["GCP", "Docker", "Jenkins", "Bash", "Linux", "Grafana"],
+      experience: 4,
+      education: "BSc Information Technology, University of Nairobi",
+    },
+    {
+      jobId: devopsJobId,
+      name: "Frank Habimana",
+      skills: ["Azure", "Kubernetes", "Terraform", "CI/CD", "Python", "Ansible"],
+      experience: 7,
+      education: "MSc Cloud Computing, Carnegie Mellon University Africa",
+    },
+
+    // ── Product Manager applicants ────────────────────────────────────────
+    {
+      jobId: productJobId,
+      name: "Gloria Mwangi",
+      skills: ["Product Roadmapping", "Agile", "Scrum", "Mixpanel", "Jira", "A/B Testing"],
+      experience: 5,
+      education: "MBA, Strathmore University",
+    },
+    {
+      jobId: productJobId,
+      name: "Hassan Kamara",
+      skills: ["User Research", "Product Strategy", "Figma", "Amplitude", "SQL"],
+      experience: 4,
+      education: "BSc Computer Science, University of Ghana",
+    },
+    {
+      jobId: productJobId,
+      name: "Ivy Nakato",
+      skills: ["Agile", "Scrum", "Product Specs", "Stakeholder Management", "Jira"],
+      experience: 3,
+      education: "BSc Business Administration, Makerere University",
+    },
+
+    // ── UX/UI Designer applicants ─────────────────────────────────────────
+    {
+      jobId: designJobId,
+      name: "Jerome Tuyishime",
+      skills: ["Figma", "Adobe XD", "Wireframing", "Prototyping", "Design Systems", "WCAG"],
+      experience: 4,
+      education: "BSc Graphic Design, IPRC Kigali",
+    },
+    {
+      jobId: designJobId,
+      name: "Karen Atieno",
+      skills: ["Figma", "Sketch", "User Research", "Usability Testing", "Motion Design"],
+      experience: 5,
+      education: "BA Communication Design, University of Cape Town",
+    },
+    {
+      jobId: designJobId,
+      name: "Leo Nzeyimana",
+      skills: ["Figma", "Canva", "HTML", "CSS", "Wireframing"],
+      experience: 2,
+      education: "Diploma in Graphic Design, Kigali Institute of Arts",
+    },
+
+    // ── Cybersecurity Analyst applicants ──────────────────────────────────
+    {
+      jobId: securityJobId,
+      name: "Monica Banda",
+      skills: ["Penetration Testing", "SIEM", "ISO 27001", "Network Security", "Python", "CEH"],
+      experience: 5,
+      education: "BSc Computer Science, University of Zambia",
+    },
+    {
+      jobId: securityJobId,
+      name: "Nelson Irakoze",
+      skills: ["Vulnerability Assessment", "Firewall Management", "AWS Security", "NIST", "CompTIA Security+"],
+      experience: 4,
+      education: "BSc Information Security, University of Rwanda",
+    },
+    {
+      jobId: securityJobId,
+      name: "Olivia Chukwu",
+      skills: ["Incident Response", "SOC 2", "SIEM", "Kali Linux", "CISSP"],
+      experience: 7,
+      education: "MSc Cybersecurity, University of Lagos",
+    },
+
+    // ── Machine Learning Engineer applicants ──────────────────────────────
+    {
+      jobId: mlJobId,
+      name: "Paul Mugabo",
+      skills: ["Python", "TensorFlow", "PyTorch", "NLP", "MLflow", "AWS SageMaker"],
+      experience: 5,
+      education: "MSc Machine Learning, Carnegie Mellon University Africa",
+    },
+    {
+      jobId: mlJobId,
+      name: "Rachel Uwase",
+      skills: ["Python", "scikit-learn", "Keras", "pandas", "Spark", "GCP Vertex AI"],
+      experience: 4,
+      education: "BSc Computer Science, University of Rwanda",
+    },
+    {
+      jobId: mlJobId,
+      name: "Samuel Eze",
+      skills: ["PyTorch", "NLP", "Hugging Face", "MLOps", "Kubeflow", "Docker"],
+      experience: 6,
+      education: "MSc Artificial Intelligence, University of Ibadan",
+    },
+
+    // ── Finance Manager applicants ────────────────────────────────────────
+    {
+      jobId: financeJobId,
+      name: "Theresa Ingabire",
+      skills: ["Financial Modelling", "IFRS", "SAP", "Excel", "Budgeting", "Forecasting"],
+      experience: 6,
+      education: "ACCA, CPA Rwanda",
+    },
+    {
+      jobId: financeJobId,
+      name: "Ugo Okonkwo",
+      skills: ["GAAP", "Oracle ERP", "Excel", "Financial Reporting", "Auditing"],
+      experience: 8,
+      education: "MSc Finance, University of Lagos",
+    },
+    {
+      jobId: financeJobId,
+      name: "Vivian Murekatete",
+      skills: ["Budgeting", "Financial Analysis", "Excel", "QuickBooks", "IFRS"],
+      experience: 4,
+      education: "BSc Accounting, University of Rwanda",
+    },
+
+    // ── HR Business Partner applicants ────────────────────────────────────
+    {
+      jobId: hrJobId,
+      name: "Walter Ndahiro",
+      skills: ["Talent Acquisition", "Performance Management", "BambooHR", "Labour Law", "DEI"],
+      experience: 5,
+      education: "BSc Human Resource Management, Makerere University",
+    },
+    {
+      jobId: hrJobId,
+      name: "Xenia Tumukunde",
+      skills: ["Employee Relations", "Workday", "Organizational Development", "Recruitment", "HRIS"],
+      experience: 6,
+      education: "MSc Human Resources, Strathmore University",
+    },
+    {
+      jobId: hrJobId,
+      name: "Zara Kalisa",
+      skills: ["Recruitment", "Onboarding", "HR Strategy", "BambooHR", "Labour Law"],
+      experience: 3,
+      education: "BSc Psychology, University of Rwanda",
     },
   ]);
 
