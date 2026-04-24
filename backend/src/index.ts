@@ -1,3 +1,6 @@
+import dns from 'dns';
+dns.setServers(['8.8.8.8', '1.1.1.1']); // Forces Google and Cloudflare DNS
+
 import dotenv from "dotenv";
 import connectDB from "./config/database.js";
 import app from "./app.js";

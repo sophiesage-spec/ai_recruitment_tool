@@ -2,7 +2,6 @@ import express, { Request, Response } from "express";
 import userRouter from "./routes/user.routes.js";
 import jobRouter from "./routes/job.routes.js";
 import screenRouter from "./routes/screen.routes.js";
-import cvRouter from "./routes/cv.routes.js"; // ── NEW: CV upload routes
 const app = express();
 
 // ─── Middleware ───────────────────────────────────────────────────────────────
@@ -28,7 +27,7 @@ app.get("/", (_req: Request, res: Response) => {
 app.use("/api/v1/users", userRouter);   // Auth: register / login / logout
 app.use("/api/jobs", jobRouter);         // GET /api/jobs/search?title=...
 app.use("/api/screen", screenRouter);    // POST /api/screen/:jobId
-app.use("/api/cv", cvRouter);            // ── NEW: POST /api/cv/upload/:jobId
+//app.use("/api/cv", cvRouter);            // ── NEW: POST /api/cv/upload/:jobId
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, message: "Route not found." });
