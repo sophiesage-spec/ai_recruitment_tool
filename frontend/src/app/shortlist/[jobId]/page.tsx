@@ -1,24 +1,20 @@
-import { notFound } from "next/navigation";
-import { mockJobs } from "~/mock/data";
 import { ShortlistClient } from "~/components/shortlist/ShortlistClient";
 
+// 1. DELETE the mockJobs import line here
+
 interface PageProps {
-  params: Promise<{ jobId: string }>;
+  params: {
+    jobId: string;
+  };
 }
 
-export default async function ShortlistPage({ params }: PageProps) {
-  const { jobId } = await params;
-  const job = mockJobs.find((j) => j.id === jobId);
+export default function ShortlistPage({ params }: PageProps) {
+  const { jobId } = params;
 
-  if (!job) {
-    notFound();
-  }
-
-  return <ShortlistClient job={job} />;
-}
-
-export async function generateStaticParams() {
-  return mockJobs.map((job) => ({
-    jobId: job.id,
-  }));
+  // 2. Ensure you aren't using mockJobs.find() here anymore
+  return (
+    <main className="min-h-screen bg-slate-50">
+      <ShortlistClient jobId={jobId} />
+    </main>
+  );
 }

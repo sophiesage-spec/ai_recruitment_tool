@@ -2,39 +2,61 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+// 1. Ensure these paths match your store exactly
 import { 
   runScreening, 
   selectShortlist, 
   selectScreeningStatus, 
   selectScreeningError,
-  clearShortlist
+  clearShortlist,
 } from "~/store/slices/shortlistSlice";
 import { type Job } from "~/types";
 import { type AppDispatch } from "~/store";
+
+// 2. Component Imports
 import { ShortlistHeader } from "./ShortlistHeader";
 import { ProgressIndicator } from "./ProgressIndicator";
 import { SummaryBar } from "./SummaryBar";
 import { CandidateRow } from "./CandidateRow";
-import { CandidateSidebar } from "./CandidateSidebar";
+import {CandidateSidebar} from "./CandidateSidebar";
 import { Warning, ArrowClockwise } from "@phosphor-icons/react";
 import { Button } from "~/components/ui/button";
 
 interface ShortlistClientProps {
-  job: Job;
+  jobId: string;
 }
 
-export function ShortlistClient({ job }: ShortlistClientProps) {
+export function ShortlistClient({ jobId }: ShortlistClientProps) {
   const dispatch = useDispatch<AppDispatch>();
+  const [job, setJob] = useState<Job | null>(null);
+  
+  // These are the variables that were "red-lined"
   const candidates = useSelector(selectShortlist);
   const status = useSelector(selectScreeningStatus);
   const error = useSelector(selectScreeningError);
 
   useEffect(() => {
-    dispatch(runScreening(job.id));
+    const fetchJobDetails = async () => {
+      try {
+        const res = await fetch(`http://localhost:4000/api/jobs/${jobId}`);
+        const data = await res.json();
+        setJob(data);
+      } catch (err) {
+        console.error("Failed to load job details", err);
+      }
+    };
+
+    if (jobId) {
+      fetchJobDetails();
+      dispatch(runScreening(jobId));
+    }
+
     return () => {
       dispatch(clearShortlist());
     };
-  }, [dispatch, job.id]);
+  }, [dispatch, jobId]);
+
+  if (!job) return <div className="p-20 text-center font-bold">Loading Job Details...</div>;
 
   return (
     <div className="min-h-screen bg-slate-50 pb-20">
@@ -50,7 +72,7 @@ export function ShortlistClient({ job }: ShortlistClientProps) {
         {status === "failed" && (
           <FailedState
             error={error}
-            onRetry={() => dispatch(runScreening(job.id))}
+            onRetry={() => dispatch(runScreening(jobId))}
           />
         )}
 
@@ -69,9 +91,9 @@ export function ShortlistClient({ job }: ShortlistClientProps) {
               </div>
               
               <div className="space-y-3">
-                {candidates.map((candidate, i) => (
+                {candidates.map((candidate: any, i: number) => (
                   <CandidateRow 
-                    key={candidate.id} 
+                    key={candidate.id || candidate._id} 
                     candidate={candidate} 
                     rank={i + 1} 
                     index={i}
@@ -87,6 +109,8 @@ export function ShortlistClient({ job }: ShortlistClientProps) {
     </div>
   );
 }
+
+// 3. Re-adding the missing FailedState component
 function FailedState({ error, onRetry }: { error: string | null; onRetry: () => void }) {
   const [cooldown, setCooldown] = useState(0);
 
@@ -124,12 +148,6 @@ function FailedState({ error, onRetry }: { error: string | null; onRetry: () => 
           </>
         )}
       </Button>
-      
-      {cooldown > 0 && (
-        <p className="mt-4 text-xs font-medium text-slate-400 animate-pulse">
-          Waiting for API quota to reset...
-        </p>
-      )}
     </div>
   );
 }

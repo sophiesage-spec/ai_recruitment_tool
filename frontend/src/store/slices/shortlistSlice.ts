@@ -13,21 +13,23 @@ export const runScreening = createAsyncThunk(
   "shortlist/runScreening",
   async (jobId: string, { rejectWithValue }) => {
     try {
-      const response = await fetch("/api/screen", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ jobId }),
+      const response = await fetch("http://localhost:4000/api/screen", {
+        method: "POST", // Must be POST
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ jobId }), // Sending the "which job" info
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        return rejectWithValue(data.error || "Failed to screen candidates");
+        const errorData = await response.json();
+        return rejectWithValue(errorData.message || "Failed to screen candidates");
       }
 
-      return data.shortlist as Candidate[];
-    } catch (err) {
-      return rejectWithValue("An error occurred while connecting to the server.");
+      const data = await response.json();
+      return data.data; // Ensure this matches your backend's response structure
+    } catch (error: any) {
+      return rejectWithValue(error.message);
     }
   }
 );

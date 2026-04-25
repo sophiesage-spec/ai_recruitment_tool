@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { searchJobByTitle, countApplicants } from "../services/job.service.js";
+import { searchJobByTitle, countApplicants, getAllJobs, deleteJobById} from "../services/job.service.js";
 
 /**
  * GET /api/jobs/search?title=<query>
@@ -10,40 +10,52 @@ export const searchJob = async (
   res: Response
 ): Promise<void> => {
   try {
-    const { title } = req.query as { title?: string };
+  const { title } = req.query as { title?: string };
+  let rawJobs;
 
-    if (!title || title.trim() === "") {
-      res.status(400).json({
-        success: false,
-        message: "Query parameter 'title' is required.",
-      });
-      return;
+  if (!title || title.trim() === "") {
+    rawJobs = await getAllJobs();
+  } else {
+    const result = await searchJobByTitle(title.trim());
+    rawJobs = result ? [result] : [];
+  }
+
+  // --- NEW LOGIC STARTS HERE ---
+  // We loop through each job and "attach" the applicant count
+  const jobsWithCounts = await Promise.all(
+    rawJobs.map(async (job: any) => {
+      // Use the service function that already exists in your project
+      const count = await countApplicants(job._id.toString());
+      
+      return {
+        ...job.toObject(), // This cleans the data for the frontend
+        applicantCount: count,
+      };
+    })
+  );
+  // --- NEW LOGIC ENDS HERE ---
+
+  res.status(200).json({
+    success: true,
+    jobs: jobsWithCounts, // Now sending jobs + their counts!
+  });
+} catch (error) {
+  res.status(500).json({ success: false, message: "Error fetching enhanced jobs" });
+}
+};
+
+export const deleteJob = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    
+    const deletedJob = await deleteJobById(id as string);
+
+    if (!deletedJob) {
+      return res.status(404).json({ success: false, message: "Job not found" });
     }
 
-    const job = await searchJobByTitle(title.trim());
-
-    if (!job) {
-      res.status(404).json({
-        success: false,
-        message: `No job found matching title: "${title}"`,
-      });
-      return;
-    }
-
-    const applicantCount = await countApplicants(
-      (job._id as { toString(): string }).toString()
-    );
-
-    res.status(200).json({
-      success: true,
-      job,
-      applicantCount,
-    });
+    res.status(200).json({ success: true, message: "Job deleted successfully" });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      message: "Internal server error.",
-      error: (error as Error).message,
-    });
+    res.status(500).json({ success: false, message: "Server error" });
   }
 };
