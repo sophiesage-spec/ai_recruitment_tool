@@ -23,7 +23,7 @@ export function JobGrid() {
     const fetchJobsFromBackend = async () => {
       dispatch(setLoading(true));
       try {
-  const response = await fetch(`${API_BASE_URL}/api/jobs/search?title=`);
+  const response = await fetch(`${API_BASE_URL}/api/jobs`);
   
   if (!response.ok) {
     throw new Error('Backend did not respond correctly');
