@@ -6,8 +6,12 @@ import screenRouter from "./routes/screen.routes.js";
 
 const app = express();
 
+// --- UPDATED CORS CONFIGURATION ---
 app.use(cors({
-  origin: "http://localhost:3000", // Allow your frontend
+  origin: [
+    "http://localhost:3000", 
+    "https://ai-recruiter-frontend-wpuq.onrender.com" // Added your live frontend URL
+  ],
   methods: ["GET", "POST", "PUT", "DELETE"],
   credentials: true
 }));
@@ -32,10 +36,10 @@ app.get("/", (_req: Request, res: Response) => {
 });
 
 // ─── Routes ───────────────────────────────────────────────────────────────────
-app.use("/api/v1/users", userRouter);   // Auth: register / login / logout
-app.use("/api/jobs", jobRouter);         // GET /api/jobs/search?title=...
+app.use("/api/v1/users", userRouter);    // Auth: register / login / logout
+app.use("/api/jobs", jobRouter);         // Matches fetch(`${API_BASE_URL}/api/jobs`)
 app.use("/api/screen", screenRouter);    // POST /api/screen/:jobId
-//app.use("/api/cv", cvRouter);            // ── NEW: POST /api/cv/upload/:jobId
+
 // ─── 404 Handler ─────────────────────────────────────────────────────────────
 app.use((_req: Request, res: Response) => {
   res.status(404).json({ success: false, message: "Route not found." });
