@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "src/config/constants";
 import { Users, Sparkle, Trash } from "@phosphor-icons/react";
 import Link from "next/link";
 import { type Job } from "~/types";
@@ -20,7 +21,7 @@ const handleDelete = async (e: React.MouseEvent) => {
     if (!window.confirm(`Are you sure you want to delete "${job.title}"?`)) return;
 
     try {
-      const response = await fetch(`http://localhost:4000/api/jobs/${job.id}`, {
+      const response = await fetch(`${API_BASE_URL}/api/jobs/${job.id}`, {
         method: "DELETE",
       });
 

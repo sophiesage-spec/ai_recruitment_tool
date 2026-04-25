@@ -1,5 +1,6 @@
 "use client";
 
+import { API_BASE_URL } from "src/config/constants";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 //import { mockJobs } from "~/mock/data";
@@ -22,7 +23,7 @@ export function JobGrid() {
     const fetchJobsFromBackend = async () => {
       dispatch(setLoading(true));
       try {
-  const response = await fetch('http://localhost:4000/api/jobs/search?title=');
+  const response = await fetch('${API_BASE_URL}/api/jobs/search?title=');
   
   if (!response.ok) {
     throw new Error('Backend did not respond correctly');

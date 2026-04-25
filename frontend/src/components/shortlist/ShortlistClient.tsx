@@ -1,5 +1,5 @@
 "use client";
-
+import { API_BASE_URL } from "src/config/constants";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 // 1. Ensure these paths match your store exactly
@@ -38,7 +38,7 @@ export function ShortlistClient({ jobId }: ShortlistClientProps) {
   useEffect(() => {
     const fetchJobDetails = async () => {
       try {
-        const res = await fetch(`http://localhost:4000/api/jobs/${jobId}`);
+        const res = await fetch(`${API_BASE_URL}/api/jobs/${jobId}`);
         const data = await res.json();
         setJob(data);
       } catch (err) {

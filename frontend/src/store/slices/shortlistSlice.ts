@@ -1,3 +1,4 @@
+import { API_BASE_URL } from "src/config/constants";
 import { createSlice, createAsyncThunk, type PayloadAction } from "@reduxjs/toolkit";
 import { type Candidate, type ShortlistState, type ScreeningStatus } from "~/types";
 import { type RootState } from "../index";
@@ -14,7 +15,7 @@ export const runScreening = createAsyncThunk(
   async (jobId: string, { rejectWithValue }) => {
     try {
       // 1. Put the jobId directly in the URL path
-      const response = await fetch(`http://localhost:4000/api/screen/${jobId}`, {
+      const response = await fetch(`${API_BASE_URL}/api/screen/${jobId}`, {
         method: "POST", 
         headers: {
           "Content-Type": "application/json",
