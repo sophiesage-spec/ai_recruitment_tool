@@ -28,8 +28,11 @@ export const countApplicants = async (jobId: string): Promise<number> => {
   return Applicant.countDocuments({ jobId });
 };
  
-//delete a certain job from the dashboard
 
+/**
+ * Deletes a job from the database by its ID.
+ */
 export const deleteJobById = async (id: string) => {
   return await Job.findByIdAndDelete(id);
 };
+

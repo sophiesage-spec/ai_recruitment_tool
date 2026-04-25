@@ -3,6 +3,7 @@ import express, { Request, Response } from "express";
 import userRouter from "./routes/user.routes.js";
 import jobRouter from "./routes/job.routes.js";
 import screenRouter from "./routes/screen.routes.js";
+
 const app = express();
 
 app.use(cors({
