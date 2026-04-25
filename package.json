@@ -13,6 +13,8 @@
     "build": "tsc"
   },
   "dependencies": {
+    "typescript": "^5.8.3",
+    "@types/node": "^22.0.0",
     "@google/generative-ai": "^0.21.0",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
@@ -24,9 +26,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.2",
-    "@types/node": "^22.0.0",
     "nodemon": "^3.1.14",
-    "tsx": "^4.19.3",
-    "typescript": "^5.8.3"
+    "tsx": "^4.19.3"
   }
 }
