@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import { MagnifyingGlass } from "@phosphor-icons/react";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,3 +24,4 @@ export function SearchBar() {
     </div>
   );
 }
+*/
