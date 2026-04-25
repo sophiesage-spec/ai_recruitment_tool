@@ -49,7 +49,7 @@ The application consists of a Next.js frontend that communicates with a Node.js/
 AI Engine & Logic Deep Dive
 Our backend leverages a sophisticated AI screening layer to transform raw candidate data into actionable hiring insights.
 1. The Model
-The system uses Gemini-2.5-flas-lite integrated via a secure Node.js service layer. This allows our backend to perform Semantic Analysis—understanding the context of a candidate's experience rather than just scanning for basic keywords.
+The system uses Gemini-2.5-flash-lite integrated via a secure Node.js service layer. This allows our backend to perform Semantic Analysis—understanding the context of a candidate's experience rather than just scanning for basic keywords.
 2. Core Functions
 Contextual Matching: The engine parses job descriptions and compares them against candidate profiles to identify overlapping competencies.
 Bias-Blind Scoring: We have engineered the data pipeline to prioritize professional skills and experience, intentionally ignoring non-meritocratic identifiers to ensure a fair screening process.
