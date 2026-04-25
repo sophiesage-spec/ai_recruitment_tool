@@ -13,12 +13,14 @@ export const runScreening = createAsyncThunk(
   "shortlist/runScreening",
   async (jobId: string, { rejectWithValue }) => {
     try {
-      const response = await fetch("http://localhost:4000/api/screen", {
-        method: "POST", // Must be POST
+      // 1. Put the jobId directly in the URL path
+      const response = await fetch(`http://localhost:4000/api/screen/${jobId}`, {
+        method: "POST", 
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ jobId }), // Sending the "which job" info
+        
+        body: JSON.stringify({}), 
       });
 
       if (!response.ok) {
@@ -27,7 +29,7 @@ export const runScreening = createAsyncThunk(
       }
 
       const data = await response.json();
-      return data.data; // Ensure this matches your backend's response structure
+      return data.top20; 
     } catch (error: any) {
       return rejectWithValue(error.message);
     }

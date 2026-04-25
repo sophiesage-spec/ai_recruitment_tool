@@ -86,12 +86,12 @@ export function ShortlistClient({ jobId }: ShortlistClientProps) {
                   AI Ranked Shortlist
                 </h3>
                 <span className="text-xs font-bold text-slate-400">
-                  Showing top {candidates.length} candidates
+                  Showing top {candidates?.length || 0} candidates
                 </span>
               </div>
               
               <div className="space-y-3">
-                {candidates.map((candidate: any, i: number) => (
+                {candidates?.map((candidate: any, i: number) => (
                   <CandidateRow 
                     key={candidate.id || candidate._id} 
                     candidate={candidate} 
