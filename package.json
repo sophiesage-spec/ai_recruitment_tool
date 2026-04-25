@@ -7,8 +7,8 @@
   "type": "module",
   "main": "backend/src/index.ts",
   "scripts": {
-    "start": "node --loader ts-node/esm backend/src/index.ts",
-    "dev": "tsx watch backend/src/index.ts",
+    "start": "node dist/index.js",
+    "dev": "tsx watch src/index.ts",
     "seed": "tsx backend/src/seed.ts",
     "build": "tsc"
   },
