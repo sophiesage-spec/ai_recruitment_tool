@@ -1,17 +1,17 @@
 import { ShortlistClient } from "~/components/shortlist/ShortlistClient";
 
-// 1. DELETE the mockJobs import line here
-
 interface PageProps {
-  params: {
+  // Change params to a Promise
+  params: Promise<{
     jobId: string;
-  };
+  }>;
 }
 
-export default function ShortlistPage({ params }: PageProps) {
-  const { jobId } = params;
+// 1. Add 'async' to the function
+export default async function ShortlistPage({ params }: PageProps) {
+  // 2. Add 'await' to the params
+  const { jobId } = await params;
 
-  // 2. Ensure you aren't using mockJobs.find() here anymore
   return (
     <main className="min-h-screen bg-slate-50">
       <ShortlistClient jobId={jobId} />
