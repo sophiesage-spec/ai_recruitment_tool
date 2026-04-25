@@ -10,7 +10,7 @@
     "start": "node dist/index.js",
     "dev": "tsx watch backend/src/index.ts",
     "seed": "tsx backend/src/seed.ts",
-    "build": "tsc"
+    "build": "tsc -p backend/tsconfig.json"
   },
   "dependencies": {
     "typescript": "^5.8.3",
