@@ -1,8 +1,5 @@
-
-# ai_recruitment_tool
-This repo includes codes for a recruitment tool powered by ai. it used Gemini LLM api to scan information of applicants.
-
 AI Talent Screener 
+
 
 The Problem
 
@@ -22,6 +19,7 @@ We assume our database is connected to the system that collects applicants data 
 Human-in-the-Loop: This tool is a Decision Support System. It is designed to rank and filter, but we assume a human recruiter remains the final decision-maker.
 Connectivity: Using our platform requires an active internet connection to communicate with the Render-hosted API.
 Browser Compatibility: Optimized for modern evergreen browsers (Chrome, Firefox, Edge).
+
 
 
 What Makes It Practical?
@@ -48,10 +46,25 @@ The application consists of a Next.js frontend that communicates with a Node.js/
 2. AI Screening Engine: Dedicated endpoints for processing candidate compatibility.
 3. Job Deletion: The recruiter is able to remove a job from the dashboard given that the screening process has been completed or the job posting is no longer relevant
 
+AI Engine & Logic Deep Dive
+Our backend leverages a sophisticated AI screening layer to transform raw candidate data into actionable hiring insights.
+1. The Model
+The system uses Gemini-2.5-flas-lite integrated via a secure Node.js service layer. This allows our backend to perform Semantic Analysis—understanding the context of a candidate's experience rather than just scanning for basic keywords.
+2. Core Functions
+Contextual Matching: The engine parses job descriptions and compares them against candidate profiles to identify overlapping competencies.
+Bias-Blind Scoring: We have engineered the data pipeline to prioritize professional skills and experience, intentionally ignoring non-meritocratic identifiers to ensure a fair screening process.
+Rank Generation: The AI outputs a normalized compatibility score, allowing the frontend to instantly sort and highlight top-tier talent.
+3. Proof of Reliability
+To ensure the system is production-ready, we conducted rigorous validation:
+Control Testing: We utilized a set of "Gold Standard" resumes (pre-graded by humans) to verify that the AI's scores aligned with expert human judgment.
+Edge-Case Handling: Tested against varied resume formats and "noisy" data to ensure the extraction logic remains robust and doesn't skip qualified candidates.
+Bias Audit: Performed manual audits of high-ranking results to confirm that the engine remained focused strictly on job-relevant criteria.
 Achievements & Technical Milestones
 
 -Production-Ready Deployment: Successfully moved from local development to a live, cross-domain production environment on Render.
 Robust API Design: Built a modular routing system where `/api/jobs` and `/api/screen` handle specific business logic.
 -Type Safety: The entire backend is written in TypeScript, ensuring data integrity and reducing runtime errors during the screening process.
+
+
 
 
