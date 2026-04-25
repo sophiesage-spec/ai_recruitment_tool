@@ -9,8 +9,7 @@
     "moduleDetection": "force",
     "isolatedModules": true,
     "verbatimModuleSyntax": true,
-    "ignoreDeprecations": "6.0",
-    
+
     /* Strictness */
     "strict": true,
     "noUncheckedIndexedAccess": true,
@@ -26,7 +25,7 @@
     "incremental": true,
 
     /* Path Aliases */
-    "baseUrl": ".",
+    /* baseUrl removed to prevent deprecation warnings and worker crashes */
     "paths": {
       "~/*": ["./src/*"]
     }
