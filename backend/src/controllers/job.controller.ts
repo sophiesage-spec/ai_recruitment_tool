@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { searchJobByTitle, countApplicants, getAllJobs, deleteJobById} from "../services/job.service.js";
+import { getJobById, searchJobByTitle, countApplicants, getAllJobs, deleteJobById} from "../services/job.service.js";
 
 /**
  * GET /api/jobs/search?title=<query>
@@ -42,6 +42,30 @@ export const searchJob = async (
 } catch (error) {
   res.status(500).json({ success: false, message: "Error fetching enhanced jobs" });
 }
+};
+//logic to get job details for screening
+export const getJobDetail = async (req: Request, res: Response) => {
+  try {
+    const { id } = req.params;
+    const job = await getJobById(id);
+
+    if (!job) {
+      return res.status(404).json({ success: false, message: "Job not found" });
+    }
+
+    // Following your "Enhanced Jobs" pattern
+    const count = await countApplicants(job._id.toString());
+    
+    res.status(200).json({
+      success: true,
+      job: {
+        ...job.toObject(),
+        applicantCount: count,
+      },
+    });
+  } catch (error) {
+    res.status(500).json({ success: false, message: "Error fetching job details" });
+  }
 };
 
 export const deleteJob = async (req: Request, res: Response) => {
