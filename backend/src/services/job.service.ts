@@ -27,8 +27,16 @@ export const searchJobByTitle = async (
 export const countApplicants = async (jobId: string): Promise<number> => {
   return Applicant.countDocuments({ jobId });
 };
- 
+//actually retrieves job using jobID for screening
 
+ export const getJobById = async (id: string) => {
+  try {
+    return await Job.findById(id);
+  } catch (error) {
+    console.error("Error in getJobById:", error);
+    throw error;
+  }
+};
 /**
  * Deletes a job from the database by its ID.
  */
