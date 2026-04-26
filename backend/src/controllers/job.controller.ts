@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getJobById, searchJobByTitle, countApplicants, getAllJobs, deleteJobById} from "../services/job.service.js";
+import { searchJobByTitle, countApplicants, getAllJobs, deleteJobById, getJobById} from "../services/job.service.js";
 
 /**
  * GET /api/jobs/search?title=<query>
